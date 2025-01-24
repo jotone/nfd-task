@@ -90,4 +90,14 @@ class NipService
         // Check if the calculated checksum matches the 10th digit (control digit) of the NIP.
         return $checksum == $chars[self::CONTROL_DIGIT_NUMBER - 1];
     }
+
+    /**
+     * Create a new service instance.
+     *
+     * @return static
+     */
+    public static function make(): static
+    {
+        return new static();
+    }
 }

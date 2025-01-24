@@ -18,14 +18,12 @@ class CompanyFactory extends Factory
      */
     public function definition(): array
     {
-        $nip_service = new NipService();
-
         return [
-            'name' => fake()->company(),
-            'tax_id' => $nip_service->generate(),
+            'name'    => fake()->company(),
+            'tax_id'  => NipService::make()->generate(),
             'address' => fake()->streetAddress(),
-            'city' => fake()->city(),
-            'zip' => fake()->postcode(),
+            'city'    => fake()->city(),
+            'zip'     => fake()->postcode(),
         ];
     }
 }
