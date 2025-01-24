@@ -2,8 +2,7 @@
 
 namespace Feature;
 
-use App\Models\Company;
-use App\Models\Employee;
+use App\Models\{Company, Employee};
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -95,7 +94,7 @@ class EmployeeModelTest extends TestCase
 
         // Verify the relationship is stored in the pivot table.
         $this->assertDatabaseHas('company_employees', [
-            'company_id' => $company->id,
+            'company_id'  => $company->id,
             'employee_id' => $employee->id,
         ]);
 
@@ -126,7 +125,7 @@ class EmployeeModelTest extends TestCase
             ->assertModelMissing($employee)
             // Assert that the relationship in the pivot table is also removed.
             ->assertDatabaseMissing('company_employees', [
-                'company_id' => $company->id,
+                'company_id'  => $company->id,
                 'employee_id' => $employee->id,
             ]);
     }
