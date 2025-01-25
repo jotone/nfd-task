@@ -25,8 +25,8 @@ class EmployeeController extends Controller
 
         // Create a query for employees, optionally filtering by companies if provided in the request.
         $collection = Employee::when(
-            value: $request->has('companies'),
-            callback: fn ($query) => $query->whereHas(
+            value: $request->has('companies'), // Check if request has companies value
+            callback: fn ($query) => $query->whereHas( // Filter the employee query with companies array
                 relation: 'companies',
                 callback: fn ($q) => $q->whereIn('companies.id', $request->get('companies', []))
             )
