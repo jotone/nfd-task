@@ -14,6 +14,16 @@ praktyki wytwarzania oprogramowania oraz korzystaj z repozytorium kodu.
 
 ## Installation guides:
 
+- Download the project:
+ ```bash
+ git clone https://github.com/jotone/nfd-task.git
+ ```
+
+- Install composer dependencies and generate the project key:
+ ```bash
+ composer install && php artisan key:genearate
+ ```
+
 - Run Sail installation:
 
  ```bash
