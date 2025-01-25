@@ -51,6 +51,33 @@ praktyki wytwarzania oprogramowania oraz korzystaj z repozytorium kodu.
 
 ## Summary
 
+Created models Company and Employee with migrations and resources files. Based on the fact that one employee, hypothetically, can work in several companies, the relationship of the models was chosen as many-to-many. This relation was provided through the "**company_employees**" table.
+The structure of the necessary tables:
+
++ companies:
+  + id - **BIGINT** - a company ID
+  + name - **VARCHAR(255)** - a company name
+  + slug - **INDEX VARCHAR(255)** - a URL-friendly identifier (index for the best search performance)
+  + tax_id - **INDEX VARCHAR(255)** - NIP (index for the best search performance)
+  + address - **VARCHAR(255)**
+  + city - **VARCHAR(255)**
+  + zip - **VARCHAR(255)** - postal code
+  + timestamps - default laravel created_at and updated_at fields
++ employees:
+  + id - **BIGINT** - an employee ID
+  + first_name - **VARCHAR(255)** - an employee name
+  + last_name - **VARCHAR(255)** - an employee surname
+  + email - **UNIQUE VARCHAR(255)** - an unique email
+  + phone - **NULLABLE VARCHAR(31)** - a phone number
+  + timestamps - default laravel created_at and updated_at fields
++ company_employees:
+  + id - **BIGINT**
+  + company_id - **INDEX UNSIGNED BIGINT** - relation to companies.id field
+  + employee_id - **INDEX UNSIGNED BIGINT** - relation to employees.id field
+  + timestamps - default laravel created_at and updated_at fields
+  + company_id_foreign - reference to the companies table for cascade deletion if the related company is deleted
+  + employee_id_foreign - reference to the employees table for cascade deletion if the related employee is deleted
+
 Created two resource controllers: a CompanyController and an EmployeeController. Both are extended from a Controller class that shares such fields and methods:
 - *getIndexRequestParams* - a method that extracts and processes pagination and ordering parameters from the request such as **take**, **order_by** and **order_dir**.
 - *errorResponse* - a method to generate a standardized error response.
@@ -61,8 +88,6 @@ Created two resource controllers: a CompanyController and an EmployeeController.
 Created the service class NipService that allows to generate and validate NIP number.
 
 Created the RouteServiceProvider that provides an ability to separate api routes in the **routes/api.php** file.
-
-Created models Company and Employee with migrations and resources files.
 
 Created tests: Feature - for Company and Employee models and controllers; Unit - for NipService class testing;
 
@@ -84,9 +109,9 @@ Available methods:
 | show | /api/companies/{id} | api.companies.show | GET or HEAD | *Options*: <br> &lowast;`id` - The ID of the existing company | *Response code*: **200 OK** <br> *Response body*: <br> `id` (**integer**) - ID of the company <br> `name` (**string**) - the company name <br> `slug` (**string**) - a URL-friendly identifier generated from the name <br> `tax_id` (**string**) - The tax identification number (NIP) <br> `address` (**string**) - The full address of the company <br> `city` (**string**) - The city where the company is located <br> `zip` (**string**) - The postal or ZIP code of the company's address <br> `created_at` (**string**) - The date and time when the resource was created, formatted as day/Month/Year Hour:Minute <br> `updated_at` (**string**) - The date and time when the resource was last updated, formatted as day/Month/Year Hour:Minute |
 | store | /api/companies | api.companies.store | POST | *Request body*: <br> &lowast;`name` (**string**) <br> &lowast;`tax_id` (**string**) <br> &lowast;`address` (**string**) <br> &lowast;`city` (**string**) <br> &lowast;`zip` (**string**) | *Response code*: **201 CREATED** <br> *Response body*: Same as for **show** method |
 | update | /api/companies/{id} | api.companies.update | PUT or PATCH | *Options*: <br> &lowast;`id` - The ID of the existing company <br> *Request body*: <br> `name` (**string**) <br> `tax_id` (**string**) <br> `address` (**string**) <br> `city` (**string**) <br> `zip` (**string**) | *Response code*: **200 OK** <br> *Response body*: <br> Same as for **show** method |
-| attachEmployees | /api/companies/{id}/attach-employees | api.companies.attach-employees | PATCH | Options: <br> &lowast;`id` - The ID of the existing company <br> *Request body*: <br> &lowast;`list` - (**array**) - The array of employee IDs | *Response code*: **200 OK** <br> *Response body*: <br> `data` - a list of the employees <br> `links` - a list of the pagination uri <br> `meta` - a list of collection data, like: current page, last page, total items, items per page etc. |
-| detachEmployees | /api/companies/{id}/detach-employees | api.companies.detach-employees | DELETE | Options: <br> &lowast;`id` - The ID of the existing company <br> *Request body*: <br> &lowast;`list` - (**array**) - The array of employee IDs | *Response code*: **204 NO CONTENT** |
-| destroy | /api/companies/{id} | api.companies.destroy | DELETE | Options: <br> &lowast;`id` - The ID of the existing company | *Response code*: **204 NO CONTENT** |
+| attachEmployees | /api/companies/{id}/attach-employees | api.companies.attach-employees | PATCH | *Options*: <br> &lowast;`id` - The ID of the existing company <br> *Request body*: <br> &lowast;`list` - (**array**) - The array of employee IDs | *Response code*: **200 OK** <br> *Response body*: <br> `data` - a list of the employees <br> `links` - a list of the pagination uri <br> `meta` - a list of collection data, like: current page, last page, total items, items per page etc. |
+| detachEmployees | /api/companies/{id}/detach-employees | api.companies.detach-employees | DELETE | *Options*: <br> &lowast;`id` - The ID of the existing company <br> *Request body*: <br> &lowast;`list` - (**array**) - The array of employee IDs | *Response code*: **204 NO CONTENT** |
+| destroy | /api/companies/{id} | api.companies.destroy | DELETE | *Options*: <br> &lowast;`id` - The ID of the existing company | *Response code*: **204 NO CONTENT** |
 
 &lowast; - the required fields
 
@@ -106,6 +131,6 @@ Available methods:
 | show | /api/employees/{id} | api.employees.show | GET or HEAD | *Options*: <br> &lowast;`id` - The ID of the existing employee | *Response code*: **200 OK** <br> *Response body*: <br> `id` (**integer**) - ID of the employee <br> `first_name` (**string**) - the employee first name <br> `last_name`(**string**) - the employee last name <br> `email`(**string**) - the employee email <br> `phone` (**string**) - the employee email <br> `created_at` (**string**) - The date and time when the resource was created, formatted as day/Month/Year Hour:Minute <br> `updated_at` (**string**) - The date and time when the resource was last updated, formatted as day/Month/Year Hour:Minute |
 | store | /api/employees | api.employees.store | POST | *Request body*: <br> &lowast;`first_name` (**string**) <br> &lowast;`last_name` (**string**) <br> &lowast;`email` (**string**) <br> &nbsp;`phone` (**string**) | *Response code*: **201 CREATED** <br> *Response body*: Same as for **show** method |
 | update | /api/employees/{id} | api.employees.update | PUT or PATCH | *Options*: <br> &lowast;`id` - The ID of the existing employee <br> *Request body*: <br> &lowast;`first_name` (**string**) <br> &lowast;`last_name` (**string**) <br> &lowast;`email` (**string**) <br> &nbsp;`phone` (**string**) | *Response code*: **200 OK** <br> *Response body*: Same as for **show** method |
-| destroy | /api/employees/{id} | api.employees.destroy | DELETE | Options: <br> &lowast;`id` - The ID of the existing employee | *Response code*: **204 NO CONTENT** |
+| destroy | /api/employees/{id} | api.employees.destroy | DELETE | *Options*: <br> &lowast;`id` - The ID of the existing employee | *Response code*: **204 NO CONTENT** |
 
 &lowast; - the required fields

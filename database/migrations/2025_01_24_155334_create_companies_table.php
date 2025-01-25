@@ -14,7 +14,7 @@ return new class () extends Migration {
             $table->id();
             $table->string('name');
             $table->string('slug')->index();
-            $table->string('tax_id');
+            $table->string('tax_id')->index();
             $table->string('address');
             $table->string('city');
             $table->string('zip');
