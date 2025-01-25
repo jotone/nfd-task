@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Company;
 
+use App\Http\Requests\DefaultRequest;
 use App\Rules\NipVerificationRule;
 use Illuminate\Contracts\Validation\ValidationRule;
 

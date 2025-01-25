@@ -59,10 +59,10 @@ class CompanyIndexMethodTest extends TestCase
         Company::factory()->count(20)->create();
 
         // Send a GET request to the index endpoint with 'take' = 0.
-        $response = $this->getJson(route('api.companies.index', ['take' => 0]));
-
-        // Assert that the response status is 200 (OK).
-        $response->assertStatus(Response::HTTP_OK);
+        $response = $this
+            ->getJson(route('api.companies.index', ['take' => 0]))
+            // Assert that the response status is 200 (OK).
+            ->assertStatus(Response::HTTP_OK);
 
         // Assert the response contains all 20 companies.
         $this->assertCount(20, $response->json('data'));
@@ -80,13 +80,44 @@ class CompanyIndexMethodTest extends TestCase
         Company::factory()->count(30)->create();
 
         // Send a GET request with 'take' = 25.
-        $response = $this->getJson(route('api.companies.index', ['take' => 25]));
-
-        // Assert the response status is 200 (OK).
-        $response->assertStatus(Response::HTTP_OK);
+        $response = $this
+            ->getJson(route('api.companies.index', ['take' => 25]))
+            // Assert the response status is 200 (OK).
+            ->assertStatus(Response::HTTP_OK);
 
         // Assert the response contains 25 companies.
         $this->assertCount(25, $response->json('data'));
+    }
+
+    /**
+     * Test the API endpoint for fetching companies with pagination.
+     *
+     * This test ensures that the `api.companies.index` endpoint correctly handles
+     * the `take` and `page` query parameters, returning the expected data subset
+     * in the proper order.
+     */
+    public function testIndexPageParameter(): void
+    {
+        // Number of items to take per page.
+        $take = 5;
+        // The page number to fetch.
+        $page = 2;
+
+        // Create 30 companies in the database.
+        $companies = Company::factory()->count(30)->create();
+
+        // Send a GET request with 'take' = 25.
+        $response = $this
+            ->getJson(route('api.companies.index', ['take' => $take, 'page' => $page]))
+            // Assert the response status is 200 (OK).
+            ->assertStatus(Response::HTTP_OK);
+
+        // Extract the 'data' key from the JSON response.
+        $data = $response->json('data');
+        // Verify that the first item in the response matches the expected company
+        $this->assertEquals($companies[$take]->id, $data[0]['id']);
+        // Verify that the last item in the response matches the expected company.
+        $this->assertEquals($companies[$take * $page - 1]->id, $data[4]['id']);
     }
 
     /**

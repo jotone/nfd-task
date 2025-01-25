@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Company;
 
+use App\Http\Requests\DefaultRequest;
 use App\Rules\NipVerificationRule;
 use Illuminate\Contracts\Validation\ValidationRule;
 
@@ -15,11 +16,11 @@ class CompanyStoreRequest extends DefaultRequest
     public function rules(): array
     {
         return [
-            'name'    => ['required', 'string', 'max:255'],
-            'tax_id'  => ['required', 'string', 'max:255', new NipVerificationRule()],
+            'name' => ['required', 'string', 'max:255'],
+            'tax_id' => ['required', 'string', 'max:255', new NipVerificationRule()],
             'address' => ['required', 'string', 'max:255'],
-            'city'    => ['required', 'string', 'max:255'],
-            'zip'     => ['required', 'string', 'max:255'],
+            'city' => ['required', 'string', 'max:255'],
+            'zip' => ['required', 'string', 'max:255'],
         ];
     }
 }

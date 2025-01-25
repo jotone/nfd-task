@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Company;
 
+use App\Http\Requests\DefaultRequest;
 use Illuminate\Contracts\Validation\ValidationRule;
 
 class CompanyEmployeesRequest extends DefaultRequest
