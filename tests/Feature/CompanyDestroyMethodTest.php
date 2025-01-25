@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
-class CompanyDestroyTest extends TestCase
+class CompanyDestroyMethodTest extends TestCase
 {
     // Ensures a clean database state for each test.
     use RefreshDatabase;
@@ -43,7 +43,7 @@ class CompanyDestroyTest extends TestCase
     {
         // Create a company and some employees.
         $company = Company::factory()->create();
-        $employees = Employee::factory()->count(3)->create();
+        $employees = Employee::factory(3)->create();
 
         // Attach employees to the company.
         $company->employees()->attach($employees);

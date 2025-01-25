@@ -32,7 +32,7 @@ class CompanyDetachEmployeesTest extends TestCase
 
         $this
             // Send a DELETE request to detach employees.
-            ->deleteJson(route('api.companies.detach', $company->id), [
+            ->deleteJson(route('api.companies.detach-employees', $company->id), [
                 'list' => $employee_ids,
             ])
             // Assert the response status is 204 (No Content).
@@ -63,7 +63,7 @@ class CompanyDetachEmployeesTest extends TestCase
         $company->employees()->attach($employees);
 
         // Send a DELETE request with non-existent employee IDs.
-        $response = $this->deleteJson(route('api.companies.detach', $company->id), [
+        $response = $this->deleteJson(route('api.companies.detach-employees', $company->id), [
             'employees' => [99999, 0], // Non-existent IDs
         ]);
 
@@ -83,7 +83,7 @@ class CompanyDetachEmployeesTest extends TestCase
     public function testDetachEmployeesHandlesNonExistentCompany()
     {
         // Send a DELETE request to detach employees from a non-existent company.
-        $response = $this->deleteJson(route('api.companies.detach', 0), [
+        $response = $this->deleteJson(route('api.companies.detach-employees', 0), [
             'employees' => [1, 2, 3],
         ]);
 

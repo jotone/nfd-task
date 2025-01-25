@@ -29,7 +29,7 @@ class CompanyAttachEmployeesTest extends TestCase
 
         $this
             // Send a POST request to attach employees.
-            ->patchJson(route('api.companies.attach', $company->id), [
+            ->patchJson(route('api.companies.attach-employees', $company->id), [
                 'list' => $employee_ids,
             ])
             // Assert the response status is 200 (OK).
@@ -67,7 +67,7 @@ class CompanyAttachEmployeesTest extends TestCase
 
         // Send a POST request with invalid employee IDs.
         $this
-            ->patchJson(route('api.companies.attach', $company->id), [
+            ->patchJson(route('api.companies.attach-employees', $company->id), [
                 'list' => [99999, 0], // Non-existent employee IDs.
             ])
             // Assert the response status is 422 (Unprocessable Entity).
@@ -95,7 +95,7 @@ class CompanyAttachEmployeesTest extends TestCase
 
         $this
             // Send a PATCH request to attach new employees without detaching existing ones.
-            ->patchJson(route('api.companies.attach', $company->id), [
+            ->patchJson(route('api.companies.attach-employees', $company->id), [
                 'list' => $new_employee_ids,
             ])
             // Assert the response status is 200 (OK).
